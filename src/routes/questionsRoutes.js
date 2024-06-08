@@ -4,8 +4,9 @@ const controller = require('../controllers/questionsController');
 const usersController = require('../controllers/usersController');
 
 router.get('/', controller.readAll);
+router.get('/:id/answers', controller.readAnswerById); 
 router.post('/', controller.createNew); 
-router.post('/:id/answers', controller.readQuestionById, usersController.readUserById, controller.createNewAnswer);     
+router.post('/:id/answers', controller.readQuestionById, usersController.readUserById, controller.createNewAnswer);    
 router.put('/:id', controller.readQuestionById, controller.updateQuestionById);
 router.delete('/:id', controller.deleteQuestionById);
 

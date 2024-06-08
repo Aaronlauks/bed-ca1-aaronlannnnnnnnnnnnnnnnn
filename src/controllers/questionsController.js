@@ -42,6 +42,22 @@ module.exports.readAll = (req, res, next) => {
 
     model.selectAll(callback);
 }
+module.exports.readAnswerById = (req, res, next) => {
+    const data = {
+        id: req.params.id
+    }
+    const callback = (error, results, fields) => {
+        if (error) {
+            console.error("Error readAll:", error);
+            res.status(500).json(error);
+        } else if (!results[0]){
+            res.status(404).json({
+                message: "Question not found."
+            })
+        } else res.status(200).json(results);
+    }
+    model.selectAnswers(data, callback);
+}
 
 // PUT
 module.exports.readQuestionById = (req, res, next) => {
@@ -124,7 +140,7 @@ module.exports.deleteQuestionById = (req, res, next) => {
 
 // POST answers
 module.exports.createNewAnswer = (req, res, next) => {
-    if(req.body.answer == undefined || req.body.creation_date == undefined) return res.status(400).json({
+    if (req.body.answer == undefined || req.body.creation_date == undefined) return res.status(400).json({
         message: "Error missing inputs."
     });
     const data = {
@@ -133,7 +149,7 @@ module.exports.createNewAnswer = (req, res, next) => {
         answer: req.body.answer,
         creation_date: req.body.creation_date,
         additional_notes: req.body.additional_notes,
-        points: res.locals.getPoints+5
+        points: res.locals.getPoints + 5
     }
 
     const callback = (error, results, fields) => {
@@ -143,7 +159,7 @@ module.exports.createNewAnswer = (req, res, next) => {
         } else {
             res.status(201).json({
                 answer_id: results.insertId,
-                answered_question_id: req.params.id,
+                answered_question_id: parseInt(req.params.id),
                 participant_id: req.body.user_id,
                 answer: req.body.answer,
                 creation_date: req.body.creation_date,
@@ -156,5 +172,5 @@ module.exports.createNewAnswer = (req, res, next) => {
     }
 
     model.insertSingleAnswer(data, callback);
-    if(data.answer == true) model.updatePoints(data, errorHandle);
+    if (data.answer == true) model.updatePoints(data, errorHandle);
 }

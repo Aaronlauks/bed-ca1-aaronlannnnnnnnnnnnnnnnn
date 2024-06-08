@@ -48,12 +48,11 @@ module.exports.createNewUser = (req, res, next) => {
 }
 // GET / PUT
 module.exports.readUserById = (req, res, next) => {
-    console.log(req.params);
     var data = {
         id: req.params.id
     }
     if(req.body.user_id) data.id = req.body.user_id;
-    if(req.params.getId) data.id = req.params.getId
+    if(req.params.getId) data.id = req.params.getId;
 
     const callback = (error, results, fields) => {
         if (error) {
@@ -64,8 +63,7 @@ module.exports.readUserById = (req, res, next) => {
                 res.status(404).json({
                     message: "User not found"
                 });
-            }
-            else {
+            } else {
                 res.locals.getPoints = results[0].points
                 if (req.params.getId) {
                     res.status(200).json(results[0]);
@@ -78,7 +76,6 @@ module.exports.readUserById = (req, res, next) => {
                     }
                     next();
                 }
-                
             }
         }
     }

@@ -28,6 +28,15 @@ module.exports.selectAll = (callback) => {
 
     pool.query(SQLSTATMENT, callback);
 }
+module.exports.selectAnswers = (data, callback) => {
+    const SQLSTATMENT =`
+        SELECT participant_id, IF(answer, 'true', 'false') AS answer, creation_date, additional_notes
+        FROM useranswer
+        WHERE answered_question_id = ?
+        `;
+    const VALUES = [data.id]
+    pool.query(SQLSTATMENT, VALUES, callback);
+}
 // GET / PUT
 module.exports.selectById = (data, callback) => {
     const SQLSTATMENT = `
